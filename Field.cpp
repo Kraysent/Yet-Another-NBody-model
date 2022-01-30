@@ -119,9 +119,12 @@ void Field::DeleteParticlesWithinRaduis(double x, double y, double radius)
         {
             vector<Particle>& currParticles = _cells[j][i].Particles;
             
-            currParticles.erase(remove_if(currParticles.begin(), currParticles.end(), 
-                                [pos, radius](Particle p) { return ((pos - p.Position).Magnitude() < radius); }),
-                                currParticles.end());
+            auto predicate = [pos, radius](Particle p)
+            { 
+                return ((pos - p.Position).Magnitude() < radius); 
+            };
+
+            currParticles.erase(remove_if(currParticles.begin(), currParticles.end(), predicate), currParticles.end());
         }
     }
 }
